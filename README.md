@@ -173,6 +173,20 @@ The backend allows all origins by default. If you need to restrict, edit `main.p
 allow_origins=["http://localhost:8000"]
 ```
 
+## GPU/CPU Support
+
+The application supports running on NVIDIA GPUs with CUDA for faster inference. However, there may be issues initializing the model on some systems due to CUDA/cuBLAS compatibility. If CUDA initialization fails, the application will automatically fall back to CPU.
+
+## Troubleshooting CUDA Issues
+
+If you encounter problems with GPU initialization (e.g., "Unable to initialize model on GPU: 'cuda'"), try the following:
+
+1. Ensure you have the correct version of `llama-cpp-python` installed. Some versions may not include CUDA support.
+2. Use Python 3.11 for better compatibility with CUDA-enabled wheels.
+3. If no prebuilt CUDA-enabled wheel is available, you may need to build `llama-cpp-python` from source with cuBLAS enabled.
+
+If all else fails, the application will still run on CPU, albeit slower.
+
 ## Development
 
 ### Running in Development Mode
