@@ -23,6 +23,10 @@ app.include_router(chat_routes.router, prefix="/api", tags=["Chat"])
 # Serve frontend
 frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
+# Serve photos (logo) from root photos/ so frontend can reference /photos/logo.svg
+photos_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "photos")
+if os.path.exists(photos_path):
+    app.mount("/photos", StaticFiles(directory=photos_path), name="photos")
 
 @app.get("/api/health")
 async def health_check():

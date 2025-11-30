@@ -57,6 +57,9 @@ body {
     height: 40px;
 }
 
+/* Logo image for header */
+/* Logo image class removed - logo is no longer used */
+
 .subtitle {
     color: var(--text-secondary);
     font-size: 1.1rem;

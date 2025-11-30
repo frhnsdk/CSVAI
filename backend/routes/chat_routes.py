@@ -2,11 +2,9 @@ from fastapi import APIRouter, HTTPException
 import os
 from pydantic import BaseModel
 from services.chat_service import ChatService
-from services.ai_service import AIService
 
 router = APIRouter()
 chat_service = ChatService()
-ai_service = AIService()
 
 class ChatRequest(BaseModel):
     message: str
@@ -49,8 +47,9 @@ async def get_chat_history(session_id: str = "default"):
 async def llm_health():
     """Report AI model device, params, and load status."""
     try:
-        device = getattr(ai_service, "device", None)
-        model_path = getattr(ai_service, "model_path", None)
+        ai_service = getattr(chat_service, "ai_service", None)
+        device = getattr(ai_service, "device", None) if ai_service is not None else None
+        model_path = getattr(ai_service, "model_path", None) if ai_service is not None else None
         return {
             "device": device,
             "model_path": model_path,
@@ -59,7 +58,7 @@ async def llm_health():
                 "CSVAI_N_CTX": os.environ.get("CSVAI_N_CTX", "1024"),
                 "CSVAI_NGL": os.environ.get("CSVAI_NGL", "50"),
             },
-            "loaded": ai_service.is_model_loaded(),
+            "loaded": ai_service.is_model_loaded() if ai_service is not None else False,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
